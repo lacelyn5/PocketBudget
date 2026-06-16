@@ -706,3 +706,39 @@ select option {
     color: #111827;
     background: #ffffff;
 }
+.date-field-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.date-field-wrapper input[type="date"] {
+    padding-right: 52px;
+    color: #f3f6ff;
+    color-scheme: dark;
+}
+
+.date-field-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
+.date-picker-button {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+
+.date-picker-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    pointer-events: none;
