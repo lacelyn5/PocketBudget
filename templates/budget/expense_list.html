@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load budget_extras %}
+{% block content %}
+<section class="section-title">
+    <div>
+        <div class="eyebrow">Expenses</div>
+        <h1>Your spending history</h1>
+        <p class="muted">Filter by category, by date, or both.</p>
+    </div>
+    <a class="primary-btn" href="{% url 'add_expense' %}">Add expense</a>
+</section>
+
+<section class="glass-card">
+    <form method="get" class="filter-row expense-filter">
+        <div class="field-wrap">{{ filter_form.category.label_tag }}{{ filter_form.category }}</div>
+        <div class="field-wrap">{{ filter_form.date.label_tag }}{{ filter_form.date }}</div>
+        <button class="ghost-btn" type="submit">Filter</button>
+        <a class="ghost-btn" href="{% url 'expense_list' %}">Clear</a>
+    </form>
+
+    <div class="expense-list big">
+        {% for expense in expenses %}
+            <div class="expense-row">
+                <span class="category-icon" style="background: {{ expense.category.color }}">{{ expense.category.icon }}</span>
+                <div>
+                    <strong>{{ expense.title }}</strong>
+                    <span>{{ expense.category.name }} · {{ expense.date|date:"M d, Y" }}{% if expense.note %} · {{ expense.note|truncatechars:60 }}{% endif %}</span>
+                </div>
+                <b>{{ expense.amount|money }}</b>
+                <div class="action-row compact-actions">
+                    <a class="ghost-btn small-btn" href="{% url 'edit_expense' expense.id %}">Edit</a>
+                    <form method="post" action="{% url 'delete_expense' expense.id %}" data-confirm="Delete this expense?">
+                        {% csrf_token %}
+                        <button class="danger-link" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="muted">No expenses found.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

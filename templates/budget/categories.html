@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-title">
+    <div>
+        <div class="eyebrow">Categories</div>
+        <h1>Expense categories</h1>
+        <p class="muted">Default categories are ready after migrations. You can add your own categories for personal spending.</p>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <h2>Add category</h2>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p class="helptext icon-note">Tip: the icon is now selected from a dropdown, so you do not need to type emoji manually.</p>
+            <button class="primary-btn" type="submit">Save category</button>
+        </form>
+    </div>
+
+    <div class="glass-card">
+        <h2>Your categories</h2>
+        <div class="category-list">
+            {% for category in categories %}
+                <article class="category-manager-row">
+                    <span class="category-icon" style="background: {{ category.color }}">{{ category.icon }}</span>
+                    <div>
+                        <strong>{{ category.name }}</strong>
+                        {% if category.is_default %}
+                            <span class="muted">Default category</span>
+                        {% else %}
+                            <span class="muted">Custom category</span>
+                        {% endif %}
+                    </div>
+                    {% if not category.is_default %}
+                        <div class="action-row compact-actions">
+                            <a class="ghost-btn small-btn" href="{% url 'edit_category' category.id %}">Edit</a>
+                            <form method="post" action="{% url 'delete_category' category.id %}" data-confirm="Delete this category?">
+                                {% csrf_token %}
+                                <button class="danger-link" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <span class="pill">Built in</span>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p class="muted">No categories yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

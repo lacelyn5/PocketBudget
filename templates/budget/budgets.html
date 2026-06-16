@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load budget_extras %}
+{% block content %}
+<section class="section-title">
+    <div>
+        <div class="eyebrow">Budgets</div>
+        <h1>Monthly budgets</h1>
+        <p class="muted">Set one overall monthly budget and smaller limits for categories.</p>
+    </div>
+</section>
+
+<section class="glass-card filter-card">
+    <form method="get" class="filter-row balanced-filter">
+        <div class="field-wrap">{{ period_form.month_number.label_tag }}{{ period_form.month_number }}</div>
+        <div class="field-wrap">{{ period_form.year_number.label_tag }}{{ period_form.year_number }}</div>
+        <button class="ghost-btn" type="submit">Show month</button>
+    </form>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <h2>Add / update budget</h2>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="primary-btn" type="submit">Save budget</button>
+        </form>
+    </div>
+    <div class="glass-card">
+        <div class="section-head compact">
+            <div>
+                <h2>{{ selected_month|date:"F Y" }}</h2>
+                <p class="muted">Selected month overview</p>
+            </div>
+        </div>
+
+        {% if overall_budget %}
+            <article class="budget-overall-card">
+                <span class="pill">Overall monthly budget</span>
+                <strong>{{ overall_budget.amount|money }}</strong>
+                <p>{{ selected_month|date:"F Y" }}</p>
+                <div class="action-row">
+                    <a class="ghost-btn small-btn" href="{% url 'edit_budget' overall_budget.id %}">Edit</a>
+                    <form method="post" action="{% url 'delete_budget' overall_budget.id %}" data-confirm="Delete this budget?">
+                        {% csrf_token %}
+                        <button class="danger-link" type="submit">Delete</button>
+                    </form>
+                </div>
+            </article>
+        {% else %}
+            <div class="empty-block">
+                <strong>No overall budget yet.</strong>
+                <p class="muted">Add one first, then category budgets will show their share of the total.</p>
+            </div>
+        {% endif %}
+
+        <div class="section-head compact sub-section-head">
+            <h2>Category budgets</h2>
+            {% if overall_budget %}<span class="pill">Planned: {{ planned_percent|percent }}</span>{% endif %}
+        </div>
+
+        {% if category_budgets %}
+            <div class="category-list">
+                {% for row in category_budgets %}
+                    <article class="budget-category-row">
+                        <div class="section-head compact">
+                            <div>
+                                <strong>{{ row.budget.category.name }}</strong>
+                                <span>{{ row.budget.amount|money }} · {{ row.share|percent }} of overall budget</span>
+                            </div>
+                            <div class="action-row compact-actions">
+                                <a class="ghost-btn small-btn" href="{% url 'edit_budget' row.budget.id %}">Edit</a>
+                                <form method="post" action="{% url 'delete_budget' row.budget.id %}" data-confirm="Delete this budget?">
+                                    {% csrf_token %}
+                                    <button class="danger-link" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="progress-bar small"><div class="progress-fill" style="width: {{ row.bar_width }}%"></div></div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">No category budgets for this month yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="glass-card narrow">
+    <div class="eyebrow">Budget</div>
+    <h1>Edit budget</h1>
+    <p class="muted">Change the amount, type or month for this budget.</p>
+    <form method="post" class="stacked-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="primary-btn" type="submit">Save changes</button>
+        <a class="ghost-btn" href="{% url 'budgets' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="auth-layout">
+    <div class="glass-card auth-copy">
+        <div class="eyebrow">Start simple</div>
+        <h1>Your money dashboard in under a minute.</h1>
+        <p>Add expenses, set a budget, and let Max point out what matters.</p>
+    </div>
+    <div class="glass-card auth-card">
+        <h2>Create account</h2>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="primary-btn full-width" type="submit">Register</button>
+        </form>
+        <p class="muted">Already have an account? <a href="{% url 'login' %}">Login</a>.</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="glass-card narrow">
+    <div class="eyebrow">Expense</div>
+    <h1>{{ title|default:"Add expense" }}</h1>
+    <p class="muted">Add the basic details. Max will use them for tips and charts.</p>
+    <form method="post" class="stacked-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="primary-btn" type="submit">{{ button_label|default:"Save expense" }}</button>
+        <a class="ghost-btn" href="{% url 'expense_list' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

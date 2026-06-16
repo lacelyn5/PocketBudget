@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="glass-card narrow">
+    <div class="eyebrow">Goal</div>
+    <h1>Edit goal</h1>
+    <p class="muted">Update the saved amount, deadline, name or target.</p>
+    <form method="post" class="stacked-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="primary-btn" type="submit">Save changes</button>
+        <a class="ghost-btn" href="{% url 'goals' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

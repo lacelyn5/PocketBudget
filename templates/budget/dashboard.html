@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load budget_extras %}
+{% block content %}
+<section class="hero-card glass-card">
+    <div>
+        <div class="eyebrow">Dashboard</div>
+        <h1>Hi {{ user.username }}, here is your budget.</h1>
+        <p>{{ month_summary }}</p>
+        <div class="hero-actions">
+            <a class="primary-btn" href="{% url 'add_expense' %}">Add expense</a>
+            <a class="ghost-btn" href="{% url 'budgets' %}">Set budget</a>
+            <a class="ghost-btn" href="{% url 'charts' %}">View charts</a>
+        </div>
+    </div>
+    <div class="ai-bubble">
+        <span class="ai-avatar">M</span>
+        <div>
+            <strong>Max says</strong>
+            <p>{{ insights.0.message|default:"Add your first expense and I will start finding patterns." }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <span>Spent this month</span>
+        <strong>{{ total_spent|money }}</strong>
+    </div>
+    <div class="stat-card">
+        <span>Monthly budget</span>
+        <strong>{{ monthly_budget|money }}</strong>
+    </div>
+    <div class="stat-card">
+        <span>Budget left</span>
+        <strong>{{ budget_left|money }}</strong>
+    </div>
+</section>
+
+<section class="glass-card">
+    <div class="section-head">
+        <div>
+            <h2>Budget progress</h2>
+            <p class="muted">A quick look at how much of the monthly budget is already used.</p>
+        </div>
+        <span class="pill">{{ budget_percent }}%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ budget_percent }}%"></div>
+    </div>
+</section>
+
+<section class="glass-card chart-promo">
+    <div class="section-head">
+        <div>
+            <h2>Max charts</h2>
+            <p class="muted">Category chart, daily trend, and budget usage. You can download SVG and CSV files.</p>
+        </div>
+        <a class="primary-btn" href="{% url 'charts' %}">Open charts</a>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <div class="section-head">
+            <h2>Top categories</h2>
+            <a href="{% url 'categories' %}">View all</a>
+        </div>
+        {% if category_rows %}
+            <div class="category-list">
+                {% for row in category_rows %}
+                    <div class="category-row">
+                        <div>
+                            <strong>{{ row.name }}</strong>
+                            <span>{{ row.share }}% of spending</span>
+                        </div>
+                        <b>{{ row.total|money }}</b>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">No expenses yet. Add one and this section will show data.</p>
+        {% endif %}
+    </div>
+
+    <div class="glass-card">
+        <div class="section-head">
+            <h2>Max tips</h2>
+            <a href="{% url 'ai_insights' %}">Open</a>
+        </div>
+        <div class="insight-list">
+            {% for insight in insights|slice:":3" %}
+                <div class="insight-card {{ insight.severity }}">
+                    <strong>{{ insight.title }}</strong>
+                    <p>{{ insight.message }}</p>
+                </div>
+            {% empty %}
+                <p class="muted">Max is waiting for data.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <div class="section-head">
+            <h2>Recent expenses</h2>
+            <a href="{% url 'expense_list' %}">View all</a>
+        </div>
+        <div class="expense-list">
+            {% for expense in recent_expenses %}
+                <div class="expense-row dashboard-expense-row">
+                    <span class="category-icon" style="background: {{ expense.category.color }}">{{ expense.category.icon }}</span>
+                    <div>
+                        <strong>{{ expense.title }}</strong>
+                        <span>{{ expense.category.name }} · {{ expense.date|date:"M d, Y" }}</span>
+                    </div>
+                    <b>{{ expense.amount|money }}</b>
+                </div>
+            {% empty %}
+                <p class="muted">No expenses yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-head">
+            <h2>Saving goals</h2>
+            <a href="{% url 'goals' %}">Manage</a>
+        </div>
+        {% for goal in goals %}
+            <div class="goal-card">
+                <div class="section-head compact">
+                    <strong>{{ goal.name }}</strong>
+                    <span>{{ goal.progress_percent }}%</span>
+                </div>
+                <div class="progress-bar small">
+                    <div class="progress-fill" style="width: {{ goal.progress_percent }}%; background: {{ goal.color }}"></div>
+                </div>
+                <p class="muted">{{ goal.current_amount|money }} / {{ goal.target_amount|money }}</p>
+            </div>
+        {% empty %}
+            <p class="muted">No goals yet. Add one to make saving visible.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

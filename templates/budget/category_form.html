@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="glass-card narrow">
+    <div class="eyebrow">Category</div>
+    <h1>Edit category</h1>
+    <p class="muted">Change the name, icon or color of your custom category.</p>
+    <form method="post" class="stacked-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+            <p class="helptext icon-note">Tip: the icon is now selected from a dropdown, so you do not need to type emoji manually.</p>
+        <button class="primary-btn" type="submit">Save changes</button>
+        <a class="ghost-btn" href="{% url 'categories' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

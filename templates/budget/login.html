@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="auth-layout">
+    <div class="glass-card auth-copy">
+        <div class="eyebrow">Local budget assistant</div>
+        <h1>Track money without a complicated spreadsheet.</h1>
+        <p>PocketBudget AI shows expenses, budgets, charts and short tips in one dashboard.</p>
+        <div class="mini-list">
+            <span>Dashboard</span>
+            <span>Budget alerts</span>
+            <span>Max tips</span>
+        </div>
+    </div>
+    <div class="glass-card auth-card">
+        <h2>Login</h2>
+        <form method="post" class="stacked-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="primary-btn full-width" type="submit">Login</button>
+        </form>
+        <p class="muted">No account? <a href="{% url 'register' %}">Create one</a>.</p>
+    </div>
+</section>
+{% endblock %}

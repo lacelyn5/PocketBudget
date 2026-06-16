@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load budget_extras %}
+
+{% block content %}
+<section class="section-title">
+    <div>
+        <div class="eyebrow">Admin stats</div>
+        <h1>Project statistics</h1>
+        <p class="muted">A simple project overview for users, expenses, budgets and recent activity.</p>
+    </div>
+
+    <a class="primary-btn" href="{% url 'admin:index' %}">
+        Manage database
+    </a>
+</section>
+
+<section class="stats-grid admin-stats-grid">
+    <div class="stat-card">
+        <span>Total users</span>
+        <strong>{{ total_users }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Total expenses</span>
+        <strong>{{ total_expenses }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Total tracked</span>
+        <strong>{{ total_spent|money }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Total budgets</span>
+        <strong>{{ total_budgets }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Total goals</span>
+        <strong>{{ total_goals }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Average expense</span>
+        <strong>{{ average_expense|money }}</strong>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <h2>Current month</h2>
+
+        <p class="big-number">{{ month_spent|money }}</p>
+        <p class="muted">Tracked in {{ current_month|date:"F Y" }}.</p>
+
+        {% if top_category %}
+            <div class="mini-stat-row">
+                <span>Top category</span>
+                <strong>{{ top_category.category__name }}</strong>
+            </div>
+        {% endif %}
+
+        <div class="mini-stat-row">
+            <span>Categories in system</span>
+            <strong>{{ category_count }}</strong>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h2>Recent users</h2>
+
+        <div class="category-list">
+            {% for user_row in recent_users %}
+                <div class="category-row">
+                    <div>
+                        <strong>{{ user_row.username }}</strong>
+                        <span>{{ user_row.expense_count }} expenses · {{ user_row.date_joined|date:"M d, Y" }}</span>
+                    </div>
+
+                    <b>{{ user_row.expense_total|money }}</b>
+                </div>
+            {% empty %}
+                <p class="muted">No users yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <div class="glass-card">
+        <h2>Category breakdown</h2>
+
+        {% if category_rows %}
+            <div class="category-list">
+                {% for row in category_rows %}
+                    <article class="budget-category-row">
+                        <div class="section-head compact">
+                            <div>
+                                <strong>{{ row.category__icon }} {{ row.category__name }}</strong>
+                                <span>{{ row.count }} expenses · {{ row.share|percent }} of all spending</span>
+                            </div>
+
+                            <b>{{ row.total|money }}</b>
+                        </div>
+
+                        <div class="progress-bar small">
+                            <div class="progress-fill" style="width: {{ row.width }}%"></div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">No expense data yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="glass-card">
+        <h2>Budgets this month</h2>
+
+        <div class="category-list">
+            {% for budget in budget_rows %}
+                <div class="category-row">
+                    <div>
+                        <strong>
+                            {% if budget.category %}
+                                {{ budget.category.name }}
+                            {% else %}
+                                Overall budget
+                            {% endif %}
+                        </strong>
+
+                        <span>{{ budget.user.username }} · {{ budget.month|date:"F Y" }}</span>
+                    </div>
+
+                    <b>{{ budget.amount|money }}</b>
+                </div>
+            {% empty %}
+                <p class="muted">No budgets for this month yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="glass-card">
+    <h2>Recent expenses</h2>
+
+    <div class="expense-list">
+        {% for expense in recent_expenses %}
+            <div class="expense-row dashboard-expense-row">
+                <span class="category-icon" style="background: {{ expense.category.color }}">
+                    {{ expense.category.icon }}
+                </span>
+
+                <div>
+                    <strong>{{ expense.title }}</strong>
+                    <span>{{ expense.user.username }} · {{ expense.category.name }} · {{ expense.date|date:"M d, Y" }}</span>
+                </div>
+
+                <b>{{ expense.amount|money }}</b>
+            </div>
+        {% empty %}
+            <p class="muted">No expenses yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-title chart-page-title">
+    <div>
+        <div class="eyebrow">Max charts</div>
+        <h1>Charts generated from your budget data</h1>
+        <p class="muted">Max turns your expenses into simple charts. You can download each chart as SVG or export the data as CSV.</p>
+    </div>
+</section>
+
+<section class="chart-stack">
+    {% for chart in charts %}
+        <article class="glass-card chart-card">
+            <div class="section-head chart-head">
+                <div>
+                    <h2>{{ chart.title }}</h2>
+                    <p class="muted">{{ chart.description }}</p>
+                </div>
+                <div class="chart-actions">
+                    <a class="ghost-btn" href="{% url 'download_chart_svg' chart.key %}">Download SVG</a>
+                    <a class="ghost-btn" href="{% url 'download_chart_csv' chart.key %}">Download CSV</a>
+                </div>
+            </div>
+            <div class="chart-preview">
+                {{ chart.svg|safe }}
+            </div>
+            <div class="max-note">
+                <span class="ai-avatar">M</span>
+                <p>{{ chart.comment }}</p>
+            </div>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

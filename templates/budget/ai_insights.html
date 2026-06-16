@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-title">
+    <div>
+        <div class="eyebrow">Local budget assistant</div>
+        <h1>Max's tips</h1>
+        <p class="muted">Max checks expenses, budgets, categories and goals. It works locally without a paid API.</p>
+    </div>
+    <a class="primary-btn" href="{% url 'dashboard' %}">Back to dashboard</a>
+</section>
+
+<section class="insight-grid">
+    {% for insight in insights %}
+        <article class="glass-card insight-card {{ insight.severity }}">
+            <span class="pill">{{ insight.severity }}</span>
+            <h2>{{ insight.title }}</h2>
+            <p>{{ insight.message }}</p>
+        </article>
+    {% empty %}
+        <div class="glass-card">
+            <p class="muted">No tips yet. Add expenses and a budget first.</p>
+        </div>
+    {% endfor %}
+</section>
+
+<section class="glass-card">
+    <h2>How Max works</h2>
+    <div class="feature-grid">
+        <div><strong>Budget check</strong><p>Compares spending with monthly and category budgets.</p></div>
+        <div><strong>Patterns</strong><p>Finds top categories, big expenses and busy spending weeks.</p></div>
+        <div><strong>Goals</strong><p>Checks saving progress and suggests a next step.</p></div>
+        <div><strong>Local logic</strong><p>Uses Python rules and saved Django data.</p></div>
+    </div>
+</section>
+{% endblock %}
