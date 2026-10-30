@@ -86,35 +86,13 @@ The project works locally. It does not use a paid API.
 
    **http://127.0.0.1:8000/**
 
-### Admin panel
+## Admin statistics page
 
-To access the Django admin panel, first create a superuser:
+The application also includes a custom statistics page for viewing project data.
 
-```bash
-python manage.py createsuperuser
-```
+After starting the server and logging in, open:
 
-Follow the prompts to create your admin account.
-
-Then open:
-
-**http://127.0.0.1:8000/admin/**
-
-Log in using the credentials you created.
-
-## Admin panel
-
-After creating a superuser, open:
-
-```text
-http://127.0.0.1:8000/admin/
-```
-
-The custom project stats page is here:
-
-```text
-http://127.0.0.1:8000/admin-stats/
-```
+[Admin Statistics](http://127.0.0.1:8000/admin-stats/)
 
 ## How Max works
 
