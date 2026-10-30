@@ -35,22 +35,72 @@ The project works locally. It does not use a paid API.
 
 ## How to run the project
 
-Open the project folder in terminal. It should be the folder where `manage.py` is located.
+### Requirements
+
+- Python 3.10 or newer.
+- pip (Python package installer).
+
+### Installation on Windows
+
+1. Open the project folder in Command Prompt or PowerShell. It should be the folder containing `manage.py`.
+
+2. Create a virtual environment:
+
+   ```bash
+   python -m venv venv
+   ```
+
+3. Activate the virtual environment.
+
+   **Command Prompt:**
+
+   ```bat
+   venv\Scripts\activate
+   ```
+
+   **PowerShell:**
+
+   ```powershell
+   .\venv\Scripts\Activate.ps1
+   ```
+
+4. Install the dependencies:
+
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+5. Apply database migrations:
+
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Start the development server:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+7. Open the application in your browser:
+
+   **http://127.0.0.1:8000/**
+
+### Admin panel
+
+To access the Django admin panel, first create a superuser:
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
 python manage.py createsuperuser
-python manage.py runserver
 ```
+
+Follow the prompts to create your admin account.
 
 Then open:
 
-```text
-http://127.0.0.1:8000/
-```
+**http://127.0.0.1:8000/admin/**
+
+Log in using the credentials you created.
 
 ## Admin panel
 
